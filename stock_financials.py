@@ -34,7 +34,6 @@ class stock_financials():
 
         # Cash
         cash = dict()
-        
         c = self.company.balance_sheet.loc['Cash']
         for i in range(len(c)):
             cash[c.index[i].year] = c[i]
@@ -72,6 +71,7 @@ class stock_financials():
         self.fin_info['recent_recommendations'] = recommendations
 
         # Adding Company Info
+        self.fin_info['Name'] = self.company.info['shortName']
         self.fin_info['Sector'] = self.company.info['sector']
         self.fin_info['Country'] = self.company.info['country'] 
     
@@ -81,11 +81,15 @@ class stock_financials():
     def get_statistics(self, ticker):
 
         url = f"https://finance.yahoo.com/quote/{ticker}/key-statistics?p={ticker}"
-        page_source = requests.get(url).content
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+
+        page_source = requests.get(url, headers=headers).content
         soup = BeautifulSoup(page_source, 'html.parser')
 
         # ROE
         self.fin_info['Return on Equity'] = soup.find("span", text="Return on Equity").findNext('td').contents[0]
+        # Revenue Growth YOY
+        self.fin_info['Quarterly Revenue Growth'] = soup.find("span", text="Quarterly Revenue Growth").findNext('td').contents[0]
     
 
 

@@ -1,5 +1,6 @@
 from glassdoor_scrapper import glassdoor
 from stock_financials import stock_financials
+from visualization import visualization
 
 output=dict()
 company = input("Enter Company name:")
@@ -12,7 +13,11 @@ output.update(gd.glassdoor_scrapping(url))
 s = stock_financials()
 output.update(s.get_stock_financials(ticker))
 
-print(output)
+v = visualization()
+v.generate_report(output)
+
+
+
 
 
     
