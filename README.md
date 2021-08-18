@@ -11,3 +11,4 @@ Requirements for the project:
 * Currently works for safari in macos (support need to be added for other browsers)
 * Libs are listed in requirements.txt or added in the repo.
 ```
+> Glassdoor scrapping is not allowed according to the terms and conditions of glassdoor. So, you can use or ignore that part at your own risk.
