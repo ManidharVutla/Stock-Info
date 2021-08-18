@@ -47,22 +47,28 @@ class glassdoor():
     def glassdoor_scrapping(self, page_source):
 
         data = {}
-        soup = BeautifulSoup(page_source, 'html.parser')
-
-        rating = soup.find("div", {"class": "v2__EIReviewsRatingsStylesV2__ratingNum v2__EIReviewsRatingsStylesV2__large"}).get_text(strip=True)
-        data ['rating'] = rating
-
-        company_ratings = soup.find_all("tspan", {"class": "donut__DonutStyle__donutchart_text_val"})
+        if page_source=="Credentials Not Provided":
+            data['rating'] = 'N/A'
+            data['recommend_to_friend'] = 'N/A'
+            data['ceo_approval'] = 'N/A'
         
-        data['recommend_to_friend'] = f'{company_ratings[0].get_text(strip=True)}%'
-        data['ceo_approval'] = f'{company_ratings[1].get_text(strip=True)}%'
-        
+        else:
+            soup = BeautifulSoup(page_source, 'html.parser')
+
+            rating = soup.find("div", {"class": "v2__EIReviewsRatingsStylesV2__ratingNum v2__EIReviewsRatingsStylesV2__large"}).get_text(strip=True)
+            data ['rating'] = rating
+
+            company_ratings = soup.find_all("tspan", {"class": "donut__DonutStyle__donutchart_text_val"})
+            
+            data['recommend_to_friend'] = f'{company_ratings[0].get_text(strip=True)}%'
+            data['ceo_approval'] = f'{company_ratings[1].get_text(strip=True)}%'
+            
         return data
 
 
     def get_email_passkey(self):
 
-        email_id,password = '',''
+        email_id,password = 'rahdinam@gmail.com','7207660@'
 
         return email_id,password
 
