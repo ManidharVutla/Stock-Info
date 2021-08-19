@@ -12,3 +12,5 @@ Requirements for the project:
 * Libs are listed in requirements.txt or added in the repo.
 ```
 > Glassdoor scrapping is not allowed according to the terms and conditions of glassdoor. So, you can use or ignore that part at your own risk.
+
+#### You can see an example report at https://manidharvutla.github.io/Stock-Info/index.html and I need to work on my html skills ;) ####
