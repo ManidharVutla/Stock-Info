@@ -1,3 +1,5 @@
+import json
+import getpass
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -67,8 +69,25 @@ class glassdoor():
 
 
     def get_email_passkey(self):
+        try:
+            with open('./secret.json', 'r') as file:
+                creds = json.load(file)
 
-        email_id,password = 'rahdinam@gmail.com','7207660@'
+            email_id = creds['email_id']
+            password = creds['password']
 
-        return email_id,password
+        except FileNotFoundError:
+            print('Glassdoor credentials not found, please enter them.')
+            email_id = input('Enter your username:\n')
+            password = getpass.getpass('Enter your password:\n')
+
+            payload = {
+                'email_id': email_id,
+                'password': password
+            }
+
+            with open('./secret.json', 'w') as file:
+                file.write(json.dumps(payload))
+
+        return email_id, password
 
