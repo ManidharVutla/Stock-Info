@@ -68,7 +68,7 @@ class glassdoor():
 
     def get_email_passkey(self):
 
-        email_id,password = 'rahdinam@gmail.com','7207660@'
+        email_id,password = '',''
 
         return email_id,password
 
