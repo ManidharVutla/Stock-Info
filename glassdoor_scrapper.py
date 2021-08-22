@@ -12,7 +12,7 @@ class glassdoor():
 
     def glassdoor_login_navigate(self, company):
         
-        email_id,password = self.get_email_passkey()
+        email_id, password = self.get_email_passkey()
         
         browser = webdriver.Safari()
 
