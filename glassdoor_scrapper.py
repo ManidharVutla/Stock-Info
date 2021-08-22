@@ -11,7 +11,9 @@ SLEEP = 3
 class glassdoor():
 
     def glassdoor_login_navigate(self, company):
-
+        
+        email_id,password = self.get_email_passkey()
+        
         browser = webdriver.Safari()
 
         login_url = "https://www.glassdoor.com/profile/login_input.htm?userOriginHook=HEADER_SIGNIN_LINK"
@@ -22,7 +24,6 @@ class glassdoor():
         email = browser.find_element_by_xpath('//*[@id="userEmail"]')
         passkey = browser.find_element_by_xpath('//*[@id="userPassword"]')
 
-        email_id,password = self.get_email_passkey()
 
         email.send_keys(email_id)
         passkey.send_keys(password)
