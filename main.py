@@ -10,7 +10,7 @@ ticker = input("Enter Company ticker symbol:")
 glassdoor_content = input("Do you want provide glassdoor credentials: Y/N:\t")
 gd = glassdoor()
 
-if glassdoor_content == "Y":
+if glassdoor_content.lower() == "y":
     url = gd.glassdoor_login_navigate(company)
     output.update(gd.glassdoor_scrapping(url))
 else:
