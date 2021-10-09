@@ -10,21 +10,21 @@ class stock_financials():
         self.company = yf.Ticker(ticker)
 
         # Earnings per share part
-        trailing_eps = float(self.company.info['trailingEps'])
+        trailing_eps = float(self.fetch_data('trailingEps'))
         self.fin_info['Trailing EPS'] = trailing_eps
 
         # P/E Ratio
-        self.fin_info['Trailing P/E'] = self.company.info['trailingPE']
+        self.fin_info['Trailing P/E'] = self.fetch_data('trailingPE')
 
         # Beta
-        self.fin_info['Beta'] = self.company.info['beta']
+        self.fin_info['Beta'] = self.fetch_data('beta')
 
         # Dividend
-        self.fin_info['Annual Dividend Rate'] = self.company.info['trailingAnnualDividendRate']
+        self.fin_info['Annual Dividend Rate'] = self.fetch_data('trailingAnnualDividendRate')
 
         # Market Capitalization and Enterprise Value
-        self.fin_info['Market Capitalization'] = float(self.company.info['marketCap'])
-        self.fin_info['Enterprise Value'] = float(self.company.info['enterpriseValue'])
+        self.fin_info['Market Capitalization'] = float(self.fetch_data('marketCap'))
+        self.fin_info['Enterprise Value'] = float(self.fetch_data('enterpriseValue'))
 
 
         # Extra Stats
@@ -32,21 +32,17 @@ class stock_financials():
 
         #---------- Graph Data -------------------
 
+  
         # Cash
-        cash = dict()
-        c = self.company.balance_sheet.loc['Cash']
-        for i in range(len(c)):
-            cash[c.index[i].year] = c[i]
+        c = self.fetch_data('Cash') 
+        cash = self.get_cash_or_debt_history(c)  
             
         self.fin_info['Cash'] = cash
 
         # Long Term Debt
         
-        debt = dict()
-
-        d = self.company.balance_sheet.loc['Long Term Debt']
-        for i in range(len(d)):
-            debt[d.index[i].year] = d[i]
+        d = self.fetch_data('Long Term Debt') 
+        debt = self.get_cash_or_debt_history(d)
 
         self.fin_info['Long Term Debt'] = debt
 
@@ -71,13 +67,31 @@ class stock_financials():
         self.fin_info['recent_recommendations'] = recommendations
 
         # Adding Company Info
-        self.fin_info['Name'] = self.company.info['shortName']
-        self.fin_info['Sector'] = self.company.info['sector']
-        self.fin_info['Country'] = self.company.info['country'] 
+        self.fin_info['Name'] = self.fetch_data('shortName') 
+        self.fin_info['Sector'] = self.fetch_data('sector') 
+        self.fin_info['Country'] = self.fetch_data('country') 
     
         return self.fin_info
     
+    def fetch_data(self, metric):
+        try:
+            if metric == 'Cash' or metric == 'Long Term Debt':
+                metric_data = self.company.balance_sheet.loc[metric]
+            else:
+                metric_data = self.company.info[metric]
+        except KeyError as error:
+            metric_data = 'Fetching Failed'
+        return metric_data
     
+    def get_cash_or_debt_history(self, data_dump):
+
+        recent_figures = dict()
+        if type(data_dump) != str:
+            for i in range(len(data_dump)):
+                recent_figures[data_dump.index[i].year] = data_dump[i]
+        return recent_figures
+            
+
     def get_statistics(self, ticker):
 
         url = f"https://finance.yahoo.com/quote/{ticker}/key-statistics?p={ticker}"

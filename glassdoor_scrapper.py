@@ -13,6 +13,9 @@ class glassdoor():
     def glassdoor_login_navigate(self, company):
         
         email_id, password = self.get_email_passkey()
+
+        if len(email_id) == 0 or len(password) == 0:
+            return "Credentials Not Provided"
         
         browser = webdriver.Safari()
 
@@ -78,17 +81,19 @@ class glassdoor():
             password = creds['password']
 
         except FileNotFoundError:
-            print('Glassdoor credentials not found, please enter them.')
-            email_id = input('Enter your username:\n')
-            password = getpass.getpass('Enter your password:\n')
+            glassdoor_content = input("Glassdoor credentials not found, Do you want provide glassdoor credentials: Y/N:\t")
+            email_id, password = "", ""
+            if glassdoor_content.lower() == "y":
+                email_id = input('Enter your username:\n')
+                password = getpass.getpass('Enter your password:\n')
 
-            payload = {
-                'email_id': email_id,
-                'password': password
-            }
+                payload = {
+                    'email_id': email_id,
+                    'password': password
+                }
 
-            with open('./secret.json', 'w') as file:
-                file.write(json.dumps(payload))
+                with open('./secret.json', 'w') as file:
+                    file.write(json.dumps(payload))
 
         return email_id, password
 
